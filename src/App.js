@@ -1,15 +1,4 @@
 import React, { useState, useMemo } from 'react'
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Progress } from "@/components/ui/progress"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
-import Link from 'next/link'
-
 
 const investmentProducts = [
   { name: "Savings Accounts", averageReturn: 3, risk: 0, durationToAchieveGoal: 72 },
@@ -26,7 +15,8 @@ const investmentProducts = [
   { name: "Cryptocurrency", averageReturn: 25, risk: 100, durationToAchieveGoal: 22 },
 ]
 
-export default function Homepage() {
+export default function App() {
+  const [currentTab, setCurrentTab] = useState('home')
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [formData, setFormData] = useState({
     gender: '',
@@ -45,7 +35,7 @@ export default function Homepage() {
     durationToAchieveGoal: '',
     investmentStrategies: []
   })
-  const [sortBy, setSortBy] = useState<'risk' | 'duration'>('risk')
+  const [sortBy, setSortBy] = useState('risk')
 
   const questions = [
     { key: 'gender', question: "Gender", type: 'select', options: ['Male', 'Female', 'Other'] },
@@ -123,57 +113,66 @@ export default function Homepage() {
           {currentQuestion + 1}. {q.question}
         </h2>
         {q.type === 'select' && (
-          <Select value={formData[q.key]} onValueChange={(value) => handleInputChange(q.key, value)}>
-            <SelectTrigger className="bg-white text-[#155887] border-[#155887]">
-              <SelectValue placeholder="Select an option" />
-            </SelectTrigger>
-            <SelectContent>
-              {q.options.map((option) => (
-                <SelectItem key={option} value={option}>{option}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <select 
+            value={formData[q.key]} 
+            onChange={(e) => handleInputChange(q.key, e.target.value)}
+            className="w-full p-2 border border-[#155887] rounded bg-white text-[#155887]"
+          >
+            <option value="">Select an option</option>
+            {q.options.map((option) => (
+              <option key={option} value={option}>{option}</option>
+            ))}
+          </select>
         )}
         {q.type === 'number' && (
-          <Input 
+          <input 
             type="number" 
             value={formData[q.key]} 
             onChange={(e) => handleInputChange(q.key, e.target.value)}
-            className="bg-white text-[#155887] border-[#155887]"
+            className="w-full p-2 border border-[#155887] rounded bg-white text-[#155887]"
           />
         )}
         {q.type === 'text' && (
-          <Input 
+          <input 
             type="text" 
             value={formData[q.key]} 
             onChange={(e) => handleInputChange(q.key, e.target.value)}
-            className="bg-white text-[#155887] border-[#155887]"
+            className="w-full p-2 border border-[#155887] rounded bg-white text-[#155887]"
           />
         )}
         {q.type === 'radio' && (
-          <RadioGroup value={formData[q.key]} onValueChange={(value) => handleInputChange(q.key, value)}>
+          <div className="space-y-2">
             {q.options.map((option) => (
               <div key={option} className="flex items-center space-x-2">
-                <RadioGroupItem value={option} id={option} className="border-[#155887] text-[#155887]" />
-                <Label htmlFor={option} className="text-[#155887]">{option}</Label>
+                <input
+                  type="radio"
+                  id={option}
+                  name={q.key}
+                  value={option}
+                  checked={formData[q.key] === option}
+                  onChange={(e) => handleInputChange(q.key, e.target.value)}
+                  className="text-[#155887] focus:ring-[#155887]"
+                />
+                <label htmlFor={option} className="text-[#155887]">{option}</label>
               </div>
             ))}
-          </RadioGroup>
+          </div>
         )}
         {q.type === 'checkbox' && (
           <div className="grid grid-cols-2 gap-2">
             {q.options.map((option) => (
               <div key={option} className="flex items-center space-x-2">
-                <Checkbox
+                <input
+                  type="checkbox"
                   id={option}
                   checked={formData[q.key].includes(option)}
-                  onCheckedChange={(checked) => {
-                    const updatedValues = checked
+                  onChange={(e) => {
+                    const updatedValues = e.target.checked
                       ? [...formData[q.key], option]
                       : formData[q.key].filter(item => item !== option)
                     handleInputChange(q.key, updatedValues)
                   }}
-                  className="border-[#155887] text-[#155887] data-[state=checked]:bg-[#155887] data-[state=checked]:text-white"
+                  className="text-[#155887] focus:ring-[#155887]"
                 />
                 <label htmlFor={option} className="text-sm font-medium text-[#155887]">
                   {option}
@@ -221,27 +220,41 @@ export default function Homepage() {
 
   return (
     <div className="flex flex-col min-h-screen bg-[#5DFED3]">
-      <header className="flex items-center justify-between p-4 bg-[#155887]">
-        <div className="flex items-center space-x-2">
+      <header className="bg-[#155887] text-white p-4">
+        <div className="container mx-auto flex justify-between items-center">
           <span className="text-2xl font-bold text-[#5DFED3]">L(Earn)</span>
+          <nav className="hidden md:flex space-x-4">
+            {["Home", "Financial Survey", "Investment"].map((item) => (
+              <button
+                key={item}
+                className={`text-white hover:text-[#5DFED3] focus:outline-none ${currentTab === item.toLowerCase().replace(' ', '-') ? 'border-b-2 border-[#5DFED3]' : ''}`}
+                onClick={() => setCurrentTab(item.toLowerCase().replace(' ', '-'))}
+              >
+                {item}
+              </button>
+            ))}
+          </nav>
         </div>
-        <nav className="hidden md:flex space-x-4">
-          {["Modules", "Videos", "Certified", "Junior", "Blog", "Live", "Financial Survey", "Investment"].map((item) => (
-            <a key={item} className="text-white hover:text-[#5DFED3]" href={`#${item.toLowerCase().replace(' ', '-')}`}>
-              {item}
-            </a>
-          ))}
-        </nav>
       </header>
-      <main className="flex-grow">
-        <Tabs defaultValue="home" className="w-full">
-          <TabsList className="w-full justify-start bg-[#155887] p-0">
-            <TabsTrigger value="home" className="data-[state=active]:bg-[#5DFED3] data-[state=active]:text-[#155887]">Home</TabsTrigger>
-            <TabsTrigger value="financial-survey" className="data-[state=active]:bg-[#5DFED3] data-[state=active]:text-[#155887]">Financial Survey</TabsTrigger>
-            <TabsTrigger value="investment" className="data-[state=active]:bg-[#5DFED3] data-[state=active]:text-[#155887]">Investment</TabsTrigger>
-          </TabsList>
-          <TabsContent value="home">
-            <section className="container mx-auto px-4 py-16 md:py-24">
+      <main className="flex-grow container mx-auto p-4">
+        <div className="bg-white shadow-md rounded-lg overflow-hidden">
+          <div className="flex border-b border-gray-200">
+            {["Home", "Financial Survey", "Investment"].map((tab) => (
+              <button
+                key={tab}
+                className={`flex-1 py-4 px-6 text-center font-medium focus:outline-none ${
+                  currentTab === tab.toLowerCase().replace(' ', '-')
+                    ? 'bg-[#155887] text-white'
+                    : 'bg-white text-[#155887] hover:bg-gray-100'
+                }`}
+                onClick={() => setCurrentTab(tab.toLowerCase().replace(' ', '-'))}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
+          <div className="p-6">
+            {currentTab === 'home' && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                 <div>
                   <h1 className="text-4xl md:text-6xl font-bold mb-4 text-[#155887]">Free and open</h1>
@@ -253,110 +266,110 @@ export default function Homepage() {
                   </p>
                 </div>
                 <div className="flex justify-center">
-                  <div className="w-[400px] h-[300px] bg-[#155887] flex items-center justify-center text-[#5DFED3]">
+                  <div className="w-full h-64 bg-[#155887] flex items-center justify-center text-[#5DFED3] rounded-lg">
                     Illustration Placeholder
                   </div>
                 </div>
               </div>
-            </section>
-          </TabsContent>
-          <TabsContent value="financial-survey">
-            <section className="container mx-auto px-4 py-16" id="financial-survey">
-              <h2 className="text-3xl font-bold mb-8 text-[#155887]">Financial Survey Quiz</h2>
-              <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6">
-                <Progress value={(currentQuestion + 1) / questions.length * 100} className="mb-6" />
+            )}
+            {currentTab === 'financial-survey' && (
+              <div>
+                <h2 className="text-3xl font-bold mb-8 text-[#155887]">Financial Survey Quiz</h2>
+                <div className="w-full bg-gray-200 rounded-full h-2.5 mb-6">
+                  <div 
+                    className="bg-[#155887] h-2.5 rounded-full" 
+                    style={{width: `${((currentQuestion + 1) / questions.length) * 100}%`}}
+                  ></div>
+                </div>
                 <form onSubmit={handleSubmit} className="space-y-8">
                   {renderQuestion()}
                   <div className="flex justify-between">
                     {currentQuestion > 0 && (
-                      <Button 
+                      <button 
                         type="button" 
                         onClick={handlePrev}
-                        className="bg-[#155887] text-white hover:bg-blue-700"
+                        className="bg-[#155887] text-white px-4 py-2 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
                       >
                         Previous
-                      </Button>
+                      </button>
                     )}
                     {currentQuestion < questions.length - 1 ? (
-                      <Button 
+                      <button 
                         type="button" 
                         onClick={handleNext}
-                        className="bg-[#155887] text-white hover:bg-blue-700"
+                        className="bg-[#155887] text-white px-4 py-2 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
                       >
                         Next
-                      </Button>
+                      </button>
                     ) : (
-                      <Button 
+                      <button 
                         type="submit"
-                        className="bg-[#155887] text-white hover:bg-blue-700"
+                        className="bg-[#155887] text-white px-4 py-2 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
                       >
                         Submit
-                      </Button>
+                      </button>
                     )}
                   </div>
                 </form>
               </div>
-            </section>
-          </TabsContent>
-          <TabsContent value="investment">
-            <div className="container mx-auto p-4">
-              {/* Goal Display Section */}
-              <div className="bg-white rounded-lg shadow-md p-6 mb-8 border-l-4 border-[#155887]">
-                <h2 className="text-2xl font-semibold text-[#155887] mb-4">Your Investment Goal</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-lg text-gray-600">Target Amount:</p>
-                    <p className="text-2xl font-bold text-[#155887]">₹500,000</p>
-                  </div>
-                  <div>
-                    <p className="text-lg text-gray-600">Time Frame:</p>
-                    <p className="text-2xl font-bold text-[#155887]">2 years</p>
+            )}
+            {currentTab === 'investment' && (
+              <div>
+                <div className="bg-white rounded-lg shadow-md p-6 mb-8 border-l-4 border-[#155887]">
+                  <h2 className="text-2xl font-semibold text-[#155887] mb-4">Your Investment Goal</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-lg text-gray-600">Target Amount:</p>
+                      <p className="text-2xl font-bold text-[#155887]">₹500,000</p>
+                    </div>
+                    <div>
+                      <p className="text-lg text-gray-600">Time Frame:</p>
+                      <p className="text-2xl font-bold text-[#155887]">2 years</p>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="mb-6 flex justify-center">
-                <Select onValueChange={(value) => setSortBy(value)}>
-                  <SelectTrigger className="w-[200px] border-[#155887] text-[#155887]">
-                    <SelectValue placeholder="Sort by" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="risk">Sort by Risk</SelectItem>
-                    <SelectItem value="duration">Sort by Duration</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {sortedProducts.map((product) => (
-                  <Card key={product.name} className="overflow-hidden shadow-lg">
-                    <CardHeader className={`${getRiskColor(product.risk, product.name)} p-4`}>
-                      <CardTitle className="text-lg font-semibold text-white">{product.name}</CardTitle>
-                    </CardHeader>
-                    <CardContent className="p-4 bg-white">
-                      <div className="space-y-2">
-                        <p className="text-sm text-gray-800">
-                          <span className="font-medium">Average Return:</span> {product.averageReturn}%
-                        </p>
-                        <p className="text-sm text-gray-800">
-                          <span className="font-medium">Risk Level:</span> {getRiskLabel(product.risk)}
-                        </p>
-                        <p className={`text-sm ${getTimeToGoalColor(product.durationToAchieveGoal)}`}>
-                          <span className="font-medium">Time to Goal:</span> {(product.durationToAchieveGoal / 12).toFixed(1)} years
-                          {product.durationToAchieveGoal / 12 <= 2 ? " (Meets your goal)" : ""}
-                        </p>
+                <div className="mb-6 flex justify-center">
+                  <select
+                    onChange={(e) => setSortBy(e.target.value)}
+                    className="w-full md:w-64 p-2 border border-[#155887] rounded text-[#155887] bg-white"
+                  >
+                    <option value="risk">Sort by Risk</option>
+                    <option value="duration">Sort by Duration</option>
+                  </select>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {sortedProducts.map((product) => (
+                    <div key={product.name} className="bg-white rounded-lg shadow-lg overflow-hidden">
+                      <div className={`${getRiskColor(product.risk, product.name)} p-4`}>
+                        <h3 className="text-lg font-semibold text-white">{product.name}</h3>
                       </div>
-                    </CardContent>
-                    <CardFooter className="bg-gray-50 p-4">
-                      <Button className="w-full bg-[#155887] text-white">
-                        LEARN
-                      </Button>
-                    </CardFooter>
-                  </Card>
-                ))}
+                      <div className="p-4">
+                        <div className="space-y-2">
+                          <p className="text-sm text-gray-800">
+                            <span className="font-medium">Average Return:</span> {product.averageReturn}%
+                          </p>
+                          <p className="text-sm text-gray-800">
+                            <span className="font-medium">Risk Level:</span> {getRiskLabel(product.risk)}
+                          </p>
+                          <p className={`text-sm ${getTimeToGoalColor(product.durationToAchieveGoal)}`}>
+                            <span className="font-medium">Time to Goal:</span> {(product.durationToAchieveGoal / 12).toFixed(1)} years
+                            {product.durationToAchieveGoal / 12 <= 2 ? " (Meets your goal)" : ""}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="bg-gray-50 p-4">
+                        <button className="w-full bg-[#155887] text-white px-4 py-2 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                          LEARN
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-          </TabsContent>
-        </Tabs>
+            )}
+          </div>
+        </div>
       </main>
       <footer className="bg-[#155887] text-white py-8">
         <div className="container mx-auto px-4">
