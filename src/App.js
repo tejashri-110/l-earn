@@ -1,4 +1,5 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo } from 'react';
+import './index.css';
 
 const investmentProducts = [
   { name: "Savings Accounts", averageReturn: 3, risk: 0, durationToAchieveGoal: 72 },
@@ -13,11 +14,11 @@ const investmentProducts = [
   { name: "Peer-to-Peer (P2P) Lending", averageReturn: 18, risk: 70, durationToAchieveGoal: 28 },
   { name: "Stock Market (Equity Investing)", averageReturn: 20, risk: 80, durationToAchieveGoal: 26 },
   { name: "Cryptocurrency", averageReturn: 25, risk: 100, durationToAchieveGoal: 22 },
-]
+];
 
 export default function App() {
-  const [currentTab, setCurrentTab] = useState('home')
-  const [currentQuestion, setCurrentQuestion] = useState(0)
+  const [currentTab, setCurrentTab] = useState('home');
+  const [currentQuestion, setCurrentQuestion] = useState(0);
   const [formData, setFormData] = useState({
     gender: '',
     age: '',
@@ -33,9 +34,9 @@ export default function App() {
     targetAmountDetails: '',
     financialGoals: [],
     durationToAchieveGoal: '',
-    investmentStrategies: []
-  })
-  const [sortBy, setSortBy] = useState('risk')
+    investmentStrategies: [],
+  });
+  const [sortBy, setSortBy] = useState('risk');
 
   const questions = [
     { key: 'gender', question: "Gender", type: 'select', options: ['Male', 'Female', 'Other'] },
@@ -61,50 +62,50 @@ export default function App() {
     ]},
     { key: 'durationToAchieveGoal', question: "Duration to achieve this goal", type: 'radio', options: ['6 – 12 months', '1 – 5 years', '5 – 10 years', 'More than 10 years'] },
     { key: 'investmentStrategies', question: "What investment strategies are you interested in?", type: 'checkbox', options: ['Long Term Growth', 'Short Term Gains', 'Income Generation', 'Preservation Capital'] },
-  ]
+  ];
 
   const handleInputChange = (key, value) => {
     setFormData(prevState => ({
       ...prevState,
-      [key]: value
-    }))
-  }
+      [key]: value,
+    }));
+  };
 
   const handleNext = () => {
-    let nextQuestion = currentQuestion + 1
+    let nextQuestion = currentQuestion + 1;
     while (nextQuestion < questions.length) {
-      const q = questions[nextQuestion]
+      const q = questions[nextQuestion];
       if (!q.condition || q.condition(formData)) {
-        setCurrentQuestion(nextQuestion)
-        break
+        setCurrentQuestion(nextQuestion);
+        break;
       }
-      nextQuestion++
+      nextQuestion++;
     }
-  }
+  };
 
   const handlePrev = () => {
-    let prevQuestion = currentQuestion - 1
+    let prevQuestion = currentQuestion - 1;
     while (prevQuestion >= 0) {
-      const q = questions[prevQuestion]
+      const q = questions[prevQuestion];
       if (!q.condition || q.condition(formData)) {
-        setCurrentQuestion(prevQuestion)
-        break
+        setCurrentQuestion(prevQuestion);
+        break;
       }
-      prevQuestion--
+      prevQuestion--;
     }
-  }
+  };
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    console.log('Form submitted:', formData)
+    e.preventDefault();
+    console.log('Form submitted:', formData);
     // Here you would typically send the data to a server
-  }
+  };
 
   const renderQuestion = () => {
-    const q = questions[currentQuestion]
+    const q = questions[currentQuestion];
     if (q.condition && !q.condition(formData)) {
-      handleNext()
-      return null
+      handleNext();
+      return null;
     }
 
     return (
@@ -169,8 +170,8 @@ export default function App() {
                   onChange={(e) => {
                     const updatedValues = e.target.checked
                       ? [...formData[q.key], option]
-                      : formData[q.key].filter(item => item !== option)
-                    handleInputChange(q.key, updatedValues)
+                      : formData[q.key].filter(item => item !== option);
+                    handleInputChange(q.key, updatedValues);
                   }}
                   className="text-[#155887] focus:ring-[#155887]"
                 />
@@ -182,41 +183,41 @@ export default function App() {
           </div>
         )}
       </div>
-    )
-  }
+    );
+  };
 
   const sortedProducts = useMemo(() => {
     return [...investmentProducts].sort((a, b) => {
       if (sortBy === 'risk') {
-        return a.risk - b.risk
+        return a.risk - b.risk;
       } else {
-        return a.durationToAchieveGoal - b.durationToAchieveGoal
+        return a.durationToAchieveGoal - b.durationToAchieveGoal;
       }
-    })
-  }, [sortBy])
+    });
+  }, [sortBy]);
 
   const getRiskColor = (risk, name) => {
-    if (name === "Cryptocurrency") return 'bg-red-900'
-    if (risk <= 20) return 'bg-green-800'
-    if (risk <= 40) return 'bg-green-600'
-    if (risk <= 60) return 'bg-red-600'
-    if (risk <= 80) return 'bg-red-700'
-    return 'bg-red-800'
-  }
+    if (name === "Cryptocurrency") return 'bg-red-900';
+    if (risk <= 20) return 'bg-green-800';
+    if (risk <= 40) return 'bg-green-600';
+    if (risk <= 60) return 'bg-red-600';
+    if (risk <= 80) return 'bg-red-700';
+    return 'bg-red-800';
+  };
 
   const getRiskLabel = (risk) => {
-    if (risk <= 20) return 'Low Risk'
-    if (risk <= 50) return 'Medium Risk'
-    return 'High Risk'
-  }
+    if (risk <= 20) return 'Low Risk';
+    if (risk <= 50) return 'Medium Risk';
+    return 'High Risk';
+  };
 
   const getTimeToGoalColor = (duration) => {
-    const goalDuration = 2 // 2 years
-    const ratio = duration / (goalDuration * 12)
-    if (ratio <= 1) return 'text-green-600'
-    if (ratio <= 1.5) return 'text-yellow-600'
-    return 'text-red-600'
-  }
+    const goalDuration = 2; // 2 years
+    const ratio = duration / (goalDuration * 12);
+    if (ratio <= 1) return 'text-green-600';
+    if (ratio <= 1.5) return 'text-yellow-600';
+    return 'text-red-600';
+  };
 
   return (
     <div className="flex flex-col min-h-screen bg-[#5DFED3]">
@@ -377,5 +378,5 @@ export default function App() {
         </div>
       </footer>
     </div>
-  )
+  );
 }
