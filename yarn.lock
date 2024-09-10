@@ -2983,6 +2983,11 @@ autoprefixer@^10.4.13:
     picocolors "^1.0.0"
     postcss-value-parser "^4.2.0"
 
+autoscale-canvas@*:
+  version "0.0.3"
+  resolved "https://registry.npmjs.org/autoscale-canvas/-/autoscale-canvas-0.0.3.tgz"
+  integrity sha512-lJcHAs0WO4ezAEYhPGXQq595E+zfbBYjpZPOjOXd0InaORsp594b/2sYFfHugOCDHXQd7Lw8LZ07dsRdPn+OVw==
+
 available-typed-arrays@^1.0.5:
   version "1.0.5"
   resolved "https://registry.npmjs.org/available-typed-arrays/-/available-typed-arrays-1.0.5.tgz"
@@ -7993,6 +7998,13 @@ process-nextick-args@~2.0.0:
   resolved "https://registry.npmjs.org/process-nextick-args/-/process-nextick-args-2.0.1.tgz"
   integrity sha512-3ouUOpQhtgrbOa17J7+uxOTpITYWaGP7/AhoR3+A+/1e9skrzelGi/dXzEYyvbxubEF6Wn2ypscTKiKJFFn1ag==
 
+progress-component@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.npmjs.org/progress-component/-/progress-component-0.0.4.tgz"
+  integrity sha512-fYW142WS9TjK9RxCOc0rt7LWkdchRY0hrUdWWNd2vhY57Ri4JBLKPnuPGX5sDnbwJtCT+Xpquxmba3BGPh6aFQ==
+  dependencies:
+    autoscale-canvas "*"
+
 promise@^8.1.0:
   version "8.3.0"
   resolved "https://registry.npmjs.org/promise/-/promise-8.3.0.tgz"
@@ -9616,6 +9628,11 @@ typedarray-to-buffer@^3.1.5:
   version "4.9.5"
   resolved "https://registry.npmjs.org/typescript/-/typescript-4.9.5.tgz"
   integrity sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==
+
+ui-select@^0.16.1:
+  version "0.16.1"
+  resolved "https://registry.npmjs.org/ui-select/-/ui-select-0.16.1.tgz"
+  integrity sha512-xB2RP58OEaB6Vv8+4j6TKiGYorb3n1A+CaESPX1QBaWtLJWL5mQJEptl9ZzTnmyQHC3JXQQJTY+iu4KH1xi7Xw==
 
 unbox-primitive@^1.0.2:
   version "1.0.2"

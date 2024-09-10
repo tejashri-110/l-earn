@@ -1,96 +1,132 @@
-import { React, useState } from 'react'
-import './needhelp.css'
-import gif1 from "../../media/gif1.gif"
-import blob4 from "../../media/blob4.svg"
-import { Button, Form, Col, Image, Row } from "react-bootstrap";
-import axios from 'axios';
+import React, { useState, useMemo } from 'react'
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import Link from 'next/link'
 
-const Needhelp = () => {
-    const [help, setHelp] = useState({
-        address1: '',
-        address2: '',
-        city: '',
-        state: '',
-        zip: '',
-        latitude: localStorage.getItem('latitude'),
-        longitude: localStorage.getItem('longitude')
+const investmentProducts = [
+  { name: "Savings Accounts", averageReturn: 3, risk: 0, durationToAchieveGoal: 72 },
+  { name: "Fixed Deposits (FDs)", averageReturn: 5, risk: 10, durationToAchieveGoal: 60 },
+  { name: "Public Provident Fund (PPF)", averageReturn: 7, risk: 15, durationToAchieveGoal: 48 },
+  { name: "National Pension Scheme (NPS)", averageReturn: 8, risk: 20, durationToAchieveGoal: 45 },
+  { name: "Bonds", averageReturn: 6, risk: 25, durationToAchieveGoal: 54 },
+  { name: "Gold & Precious Metals", averageReturn: 8, risk: 30, durationToAchieveGoal: 45 },
+  { name: "Unit Linked Insurance Plans (ULIPs)", averageReturn: 10, risk: 40, durationToAchieveGoal: 40 },
+  { name: "Mutual Funds", averageReturn: 12, risk: 50, durationToAchieveGoal: 36 },
+  { name: "Real Estate", averageReturn: 15, risk: 60, durationToAchieveGoal: 32 },
+  { name: "Peer-to-Peer (P2P) Lending", averageReturn: 18, risk: 70, durationToAchieveGoal: 28 },
+  { name: "Stock Market (Equity Investing)", averageReturn: 20, risk: 80, durationToAchieveGoal: 26 },
+  { name: "Cryptocurrency", averageReturn: 25, risk: 100, durationToAchieveGoal: 22 },
+]
+
+export default function InvestmentProducts() {
+  const [sortBy, setSortBy] = useState<'risk' | 'duration'>('risk')
+
+  // User's goal details
+  const goalAmount = 500000 // 5 Lakhs INR
+  const goalDuration = 2 // 2 years
+
+  const sortedProducts = useMemo(() => {
+    return [...investmentProducts].sort((a, b) => {
+      if (sortBy === 'risk') {
+        return a.risk - b.risk
+      } else {
+        return a.durationToAchieveGoal - b.durationToAchieveGoal
+      }
     })
+  }, [sortBy])
 
-    const onInputChange = e => {
-        setHelp({ ...help, [e.target.name]: e.target.value })
-    }
+  const getRiskColor = (risk, name) => {
+    if (name === "Cryptocurrency") return 'bg-red-900'
+    if (risk <= 20) return 'bg-green-800'
+    if (risk <= 40) return 'bg-green-600'
+    if (risk <= 60) return 'bg-red-600'
+    if (risk <= 80) return 'bg-red-700'
+    return 'bg-red-800'
+  }
 
-    const onSubmit = async (e) => {
-        e.preventDefault();
-        await axios.post("http://localhost:9002/Needhelp", help);
-        setHelp({
-            address1: '',
-            address2: '',
-            city: '',
-            state: '',
-            zip: '',
-        })
-    }
+  const getRiskLabel = (risk) => {
+    if (risk <= 20) return 'Low Risk'
+    if (risk <= 50) return 'Medium Risk'
+    return 'High Risk'
+  }
 
-    return (
-        <div className="container-ele">
-            <img src={blob4} alt="blob" className="needhelp-blob4"></img>
-            <p className="needhelp-h">Need help?</p>
-            <p className="needhelp-txt lead">When you are walking down the street, is there someone who is hungry?
-                <br></br>We will be really happy to send help in the form of food to that person
-                <br></br>Please drop in the address of that place
-                <br></br>Remember, you are awesome and you did an amazing job helping us with our goal of <strong>#FeedIndia</strong>
-            </p>
-            <Row className="needhelp-row">
-                <Col lg={4}>
-                    <div className="img-container" >
-                        <Image src={gif1} className="help-gif-el" alt="GIF here" />
-                    </div>
-                </Col>
-                <Col lg={8}>
-                    <div className="form-container">
-                        <Form className="form-ele needhelp-el" onSubmit={e => onSubmit(e)}>
-                            <Form.Group className="address1-el form-grp" controlId="formGridAddress1">
-                                <Form.Label>Address line-1</Form.Label>
-                                <Form.Control onChange={e => onInputChange(e)} value={help.address1} name="address1" type="address1" className="form-Control-el" placeholder="1234 Main St" />
-                            </Form.Group>
+  const getTimeToGoalColor = (duration) => {
+    const ratio = duration / (goalDuration * 12)
+    if (ratio <= 1) return 'text-green-600'
+    if (ratio <= 1.5) return 'text-yellow-600'
+    return 'text-red-600'
+  }
 
-
-                            <Form.Group className="address2-el form-grp" controlId="formGridAddress2">
-                                <Form.Label>Address line-2</Form.Label>
-                                <Form.Control onChange={e => onInputChange(e)} value={help.address2} name="address2" type="address2" className="form-Control-el" placeholder="Apartment, studio, or floor" />
-                            </Form.Group>
-
-
-                            <Row className="row-el">
-
-                                <Form.Group className="form-grp" as={Col} controlId="formGridCity">
-                                    <Form.Label>City</Form.Label>
-                                    <Form.Control onChange={e => onInputChange(e)} value={help.city} name="city" type="city" className="form-Control-el" />
-                                </Form.Group>
-
-
-                                <Form.Group className="form-grp" as={Col} controlId="formGridState">
-                                    <Form.Label>State</Form.Label>
-                                    <Form.Control onChange={e => onInputChange(e)} value={help.state} name="state" type="state" className="form-Control-el" />
-                                </Form.Group>
-
-
-                                <Form.Group className="form-grp" as={Col} controlId="formGridZip">
-                                    <Form.Label>Zip</Form.Label>
-                                    <Form.Control onChange={e => onInputChange(e)} value={help.zip} name="zip" type="zip" className="form-Control-el" />
-                                </Form.Group>
-
-                            </Row>
-                            <Button className="button-ele btn" variant="primary" type="submit">
-                                Get my location
-                            </Button>
-                        </Form>
-                    </div>
-                </Col>
-            </Row>
+  return (
+    <div className="min-h-screen bg-gray-100">
+      {/* Navbar */}
+      <nav className="bg-[#155887] text-white p-4">
+        <div className="container mx-auto flex justify-between items-center">
+          <Link href="/" className="text-2xl font-bold">L(EARN)</Link>
+          <div className="space-x-4">
+            <Link href="/about">About</Link>
+            <Link href="/contact">Contact</Link>
+          </div>
         </div>
-    )
-}
+      </nav>
 
-export default Needhelp
+      <div className="container mx-auto p-4">
+        {/* Goal Display Section */}
+        <div className="bg-white rounded-lg shadow-md p-6 mb-8 border-l-4 border-[#155887]">
+          <h2 className="text-2xl font-semibold text-[#155887] mb-4">Your Investment Goal</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <p className="text-lg text-gray-600">Target Amount:</p>
+              <p className="text-2xl font-bold text-[#155887]">₹{goalAmount.toLocaleString('en-IN')}</p>
+            </div>
+            <div>
+              <p className="text-lg text-gray-600">Time Frame:</p>
+              <p className="text-2xl font-bold text-[#155887]">{goalDuration} years</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="mb-6 flex justify-center">
+          <Select onValueChange={(value) => setSortBy(value)}>
+            <SelectTrigger className="w-[200px] border-[#155887] text-[#155887]">
+              <SelectValue placeholder="Sort by" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="risk">Sort by Risk</SelectItem>
+              <SelectItem value="duration">Sort by Duration</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {sortedProducts.map((product) => (
+            <Card key={product.name} className="overflow-hidden shadow-lg">
+              <CardHeader className={`${getRiskColor(product.risk, product.name)} p-4`}>
+                <CardTitle className="text-lg font-semibold text-white">{product.name}</CardTitle>
+              </CardHeader>
+              <CardContent className="p-4 bg-white">
+                <div className="space-y-2">
+                  <p className="text-sm text-gray-800">
+                    <span className="font-medium">Average Return:</span> {product.averageReturn}%
+                  </p>
+                  <p className="text-sm text-gray-800">
+                    <span className="font-medium">Risk Level:</span> {getRiskLabel(product.risk)}
+                  </p>
+                  <p className={`text-sm ${getTimeToGoalColor(product.durationToAchieveGoal)}`}>
+                    <span className="font-medium">Time to Goal:</span> {(product.durationToAchieveGoal / 12).toFixed(1)} years
+                    {product.durationToAchieveGoal / 12 <= goalDuration ? " (Meets your goal)" : ""}
+                  </p>
+                </div>
+              </CardContent>
+              <CardFooter className="bg-gray-50 p-4">
+                <Button className="w-full bg-[#155887] text-white">
+                  LEARN
+                </Button>
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
