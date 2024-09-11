@@ -1,11 +1,11 @@
 {
-  "name": "l-earn",
+  "name": "tripti",
   "version": "0.1.0",
   "lockfileVersion": 3,
   "requires": true,
   "packages": {
     "": {
-      "name": "l-earn",
+      "name": "tripti",
       "version": "0.1.0",
       "dependencies": {
         "@fortawesome/fontawesome-svg-core": "^1.2.36",
@@ -25,12 +25,10 @@
         "bootstrap": "^5.1.1",
         "components": "^0.1.0",
         "leaflet": "^1.7.1",
-        "lucide-react": "^0.439.0",
         "next-images": "^1.8.5",
         "progress-component": "^0.0.4",
         "react": "^17.0.2",
         "react-bootstrap": "^2.0.0-rc.0",
-        "react-confetti": "^6.1.0",
         "react-countup": "^6.0.0",
         "react-dom": "^17.0.2",
         "react-leaflet": "^3.2.2",
@@ -10273,6 +10271,19 @@
       "resolved": "https://registry.npmjs.org/fs.realpath/-/fs.realpath-1.0.0.tgz",
       "integrity": "sha1-FQStJSMVjKpA20onh8sBQRmU6k8="
     },
+    "node_modules/fsevents": {
+      "version": "2.3.2",
+      "resolved": "https://registry.npmjs.org/fsevents/-/fsevents-2.3.2.tgz",
+      "integrity": "sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==",
+      "hasInstallScript": true,
+      "optional": true,
+      "os": [
+        "darwin"
+      ],
+      "engines": {
+        "node": "^8.16.0 || ^10.6.0 || >=11.0.0"
+      }
+    },
     "node_modules/function-bind": {
       "version": "1.1.1",
       "resolved": "https://registry.npmjs.org/function-bind/-/function-bind-1.1.1.tgz",
@@ -15131,15 +15142,6 @@
         "yallist": "^3.0.2"
       }
     },
-    "node_modules/lucide-react": {
-      "version": "0.439.0",
-      "resolved": "https://registry.npmjs.org/lucide-react/-/lucide-react-0.439.0.tgz",
-      "integrity": "sha512-PafSWvDTpxdtNEndS2HIHxcNAbd54OaqSYJO90/b63rab2HWYqDbH194j0i82ZFdWOAcf0AHinRykXRRK2PJbw==",
-      "license": "ISC",
-      "peerDependencies": {
-        "react": "^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0-rc"
-      }
-    },
     "node_modules/lz-string": {
       "version": "1.5.0",
       "resolved": "https://registry.npmjs.org/lz-string/-/lz-string-1.5.0.tgz",
@@ -17725,21 +17727,6 @@
         "react-dom": ">=16.14.0"
       }
     },
-    "node_modules/react-confetti": {
-      "version": "6.1.0",
-      "resolved": "https://registry.npmjs.org/react-confetti/-/react-confetti-6.1.0.tgz",
-      "integrity": "sha512-7Ypx4vz0+g8ECVxr88W9zhcQpbeujJAVqL14ZnXJ3I23mOI9/oBVTQ3dkJhUmB0D6XOtCZEM6N0Gm9PMngkORw==",
-      "license": "MIT",
-      "dependencies": {
-        "tween-functions": "^1.2.0"
-      },
-      "engines": {
-        "node": ">=10.18"
-      },
-      "peerDependencies": {
-        "react": "^16.3.0 || ^17.0.1 || ^18.0.0"
-      }
-    },
     "node_modules/react-countup": {
       "version": "6.0.0",
       "resolved": "https://registry.npmjs.org/react-countup/-/react-countup-6.0.0.tgz",
@@ -19887,12 +19874,6 @@
       "version": "1.14.1",
       "resolved": "https://registry.npmjs.org/tslib/-/tslib-1.14.1.tgz",
       "integrity": "sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg=="
-    },
-    "node_modules/tween-functions": {
-      "version": "1.2.0",
-      "resolved": "https://registry.npmjs.org/tween-functions/-/tween-functions-1.2.0.tgz",
-      "integrity": "sha512-PZBtLYcCLtEcjL14Fzb1gSxPBeL7nWvGhO5ZFPGqziCcr8uvHp0NDmdjBchp6KHL+tExcg0m3NISmKxhU394dA==",
-      "license": "BSD"
     },
     "node_modules/type-check": {
       "version": "0.4.0",
